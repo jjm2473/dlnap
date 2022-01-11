@@ -422,20 +422,20 @@ class DlnapDevice:
       self.has_av_transport = False
 
       try:
-         self.__raw = raw.decode()
+         self.__raw = raw.decode('utf-8')
          self.location = _get_location_url(self.__raw)
          self.__logger.info('location: {}'.format(self.location))
 
          self.port = _get_port(self.location)
          self.__logger.info('port: {}'.format(self.port))
 
-         raw_desc_xml = urlopen(self.location).read().decode()
+         raw_desc_xml = urlopen(self.location).read().decode('utf-8')
 
          self.__desc_xml = _xml2dict(raw_desc_xml)
          self.__logger.debug('description xml: {}'.format(self.__desc_xml))
 
          self.name = _get_friendly_name(self.__desc_xml)
-         self.__logger.info('friendlyName: {}'.format(self.name))
+         self.__logger.info(u'friendlyName: {}'.format(self.name))
 
          self.control_url = _get_control_url(self.__desc_xml, URN_AVTransport)
          self.__logger.info('control_url: {}'.format(self.control_url))
@@ -449,7 +449,7 @@ class DlnapDevice:
          self.__logger.warning('DlnapDevice (ip = {}) init exception:\n{}'.format(ip, traceback.format_exc()))
 
    def __repr__(self):
-      return '{} @ {}'.format(self.name, self.ip)
+      return u'{} @ {}'.format(self.name, self.ip)
 
    def __eq__(self, d):
       return self.name == d.name and self.ip == d.ip
@@ -807,7 +807,7 @@ if __name__ == '__main__':
    if action in ('', 'list'):
       print('Discovered devices:')
       for d in allDevices:
-         print(' {} {}'.format('[a]' if d.has_av_transport else '[x]', d))
+         print(u' {} {}'.format('[a]' if d.has_av_transport else '[x]', d))
       sys.exit(0)
 
    d = allDevices[0]
